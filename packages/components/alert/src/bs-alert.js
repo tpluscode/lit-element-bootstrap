@@ -9,7 +9,8 @@ export class BsAlert extends LitElement {
         return {
             show: { type: Boolean, reflect: true },
             fade: { type: Boolean, reflect: true },
-            dismissable: { type: Boolean, reflect: true }
+            dismissable: { type: Boolean, reflect: true },
+            role: { type: String, reflect: true }
         };
     }
 
@@ -23,7 +24,7 @@ export class BsAlert extends LitElement {
     render() {
         return html`
             <slot name="heading"></slot>
-            <slot name="message"></slot>
+            <slot></slot>
             <slot name="dismiss"></slot>
         `;
     }
@@ -33,6 +34,7 @@ export class BsAlert extends LitElement {
         this.show = false;
         this.fade = false;
         this.dismissable = false;
+        this.role = 'alert';
     }
 
     firstUpdated() {
@@ -43,6 +45,7 @@ export class BsAlert extends LitElement {
 
     _afterElementTransition() {
         this._fireClosedEvent();
+        this.remove();
     }
 
     _handleAlertDismiss() {

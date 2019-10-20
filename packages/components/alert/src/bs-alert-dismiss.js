@@ -2,7 +2,7 @@
 import { LitElement, html } from 'lit-element';
 import { BsAlertDismissCss } from './bs-alert-dismiss.css.js';
 
-import '@lit-element-bootstrap/button/bs-close-button.js';
+import './bs-close-button.js';
 
 export class BsAlertDismiss extends LitElement {
 

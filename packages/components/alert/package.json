@@ -16,18 +16,20 @@
     "access": "public"
   },
   "scripts": {
-    "pika:build": "pika build"
+    "pika:build": "pika build",
+    "serve:demo": "es-dev-server --node-resolve --app-index index-demo.html"
   },
   "dependencies": {
-    "@lit-element-bootstrap/button": "^1.0.0-alpha.7",
     "@lit-element-bootstrap/content": "^1.0.0-alpha.3",
-    "lit-element": "^2.2.1"
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.1.2"
   },
   "devDependencies": {
     "@pika/pack": "^0.5.0",
     "@pika/plugin-build-web": "^0.6.1",
     "@pika/plugin-bundle-web": "^0.6.1",
-    "@pika/plugin-standard-pkg": "^0.6.1"
+    "@pika/plugin-standard-pkg": "^0.6.1",
+    "es-dev-server": "^1.18.4"
   },
   "@pika/pack": {
     "pipeline": [
@@ -40,7 +42,7 @@
       [
         "@pika/plugin-bundle-web",
         {
-            "entrypoint": "unpkg"
+          "entrypoint": "unpkg"
         }
       ]
     ]
