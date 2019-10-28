@@ -1,5 +1,7 @@
 
 import { LitElement, html, css } from 'lit-element';
+import { BsContentRebootCss } from '@lit-element-bootstrap/content/bs-content-reboot.css.js';
+import { DefaultThemeCss } from '@lit-element-bootstrap/theme/default-theme-css.js';
 
 import '../src/bs-alert.js';
 import '../src/bs-alert-hr.js';
@@ -14,19 +16,10 @@ export class AlertDemo extends LitElement {
 
     static get styles() {
         return [
+            BsContentRebootCss,
+            DefaultThemeCss,
             css`
-                :host {
-                    text-size-adjust: 100%;
-                    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-                    font-size: 1rem;
-                    font-weight: 400;
-                    line-height: 1.5;
-                    color: rgb(33, 37, 41);
-                    text-align: left;
-                }
-
                 .container {
-
                     padding-left: 15px;
                     padding-right: 15px;
                 }
@@ -110,11 +103,11 @@ export class AlertDemo extends LitElement {
                     <div>
                         Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.
                         <bs-alert-hr success></bs-alert-hr>
-                        <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+                        <p>Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
                     </div>
                 </bs-alert>
 
-                <bs-alert warning dismissable fade show>
+                <bs-alert warning dismissable>
                     <div>
                         <strong>Holy guacamole!</strong> You should check in on some of those fields below.
                     </div>
@@ -127,9 +120,6 @@ export class AlertDemo extends LitElement {
 
     constructor() {
         super();
-    }
-
-    firstUpdated() {
     }
 };
 

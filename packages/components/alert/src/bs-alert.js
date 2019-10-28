@@ -1,22 +1,17 @@
 
 import { LitElement, html } from 'lit-element';
 import { BsAlertCss } from './bs-alert.css.js';
-import { BsContentRebootCss } from '@lit-element-bootstrap/content/bs-content-reboot.css.js';
 
 export class BsAlert extends LitElement {
 
     static get properties() {
         return {
-            show: { type: Boolean, reflect: true },
-            fade: { type: Boolean, reflect: true },
-            dismissable: { type: Boolean, reflect: true },
-            role: { type: String, reflect: true }
+            dismissable: { type: Boolean, reflect: true }
         };
     }
 
     static get styles() {
         return [
-            BsContentRebootCss,
             BsAlertCss
         ];
     }
@@ -31,26 +26,38 @@ export class BsAlert extends LitElement {
 
     constructor() {
         super();
-        this.show = false;
-        this.fade = false;
         this.dismissable = false;
-        this.role = 'alert';
     }
 
     firstUpdated() {
-        const alertElement = this.shadowRoot.host;
-        alertElement.addEventListener('transitionend', () => this._afterElementTransition());
-        this.addEventListener('close-button-click', () => this._handleAlertDismiss());
+        super.firstUpdated();
+        this._addAriaRole();
+        this.addEventListener('close.button.click', () => this.dismiss());
+        this.addEventListener('transitionend', () => this._afterElementTransition());
+    }
+
+    _addAriaRole() {
+        this.setAttribute('role', 'alert');
+    }
+
+    dismiss() {
+
+        console.log(this.dismissable);
+
+        if(this.dismissable) {
+
+            this._fireCloseEvent();
+
+            // the change in opacity triggers a css transition
+            // done in javascript to avoid the need of an extra
+            // element attribute.
+            this.style.opacity = '0';
+        }
     }
 
     _afterElementTransition() {
         this._fireClosedEvent();
         this.remove();
-    }
-
-    _handleAlertDismiss() {
-        this._fireCloseEvent();
-        this.show = false;
     }
 
     _fireClosedEvent() {

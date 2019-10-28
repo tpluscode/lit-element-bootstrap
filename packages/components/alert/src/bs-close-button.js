@@ -19,12 +19,12 @@ export class BsCloseButton extends LitElement {
 
     firstUpdated() {
         const buttonElement = this.shadowRoot.querySelector('button');
-        buttonElement.addEventListener('click', () => this._handleClick());
+        buttonElement.addEventListener('click', _ => this._handleClick());
     }
 
     _handleClick() {
 
-        const alertCloseEvent = new CustomEvent('close-button-click', {
+        const alertCloseEvent = new CustomEvent('close.button.click', {
             bubbles: true,
             composed: true
         });
