@@ -6,11 +6,11 @@ import '../src/bs-alert.js';
 
 describe('bs-alert', () => {
 
-    it('bs-alert with default state is accessible', async () => {
+    it('bs-alert is accessible', async () => {
 
         // given
         const alertTemplate = html`
-            <bs-alert primary>
+            <bs-alert>
                 <p>This is an alert message</p>
             </bs-alert>
         `;
@@ -22,11 +22,11 @@ describe('bs-alert', () => {
         assert.isAccessible(bsAlert);
     });
 
-    it('bs-alert with default aria role is accessible', async () => {
+    it('bs-alert has correct aria role', async () => {
 
         // given
         const alertTemplate = html`
-            <bs-alert primary>
+            <bs-alert>
                 <p>This is an alert message</p>
             </bs-alert>
         `;
@@ -38,11 +38,11 @@ describe('bs-alert', () => {
         expect(bsAlert).to.have.attribute('role', 'alert');
     });
 
-    it('bs-alert with not valid aria role is not accessible', async () => {
+    it('bs-alert is not dismissable', async () => {
 
         // given
         const alertTemplate = html`
-            <bs-alert primary role="something-not-valid">
+            <bs-alert>
                 <p>This is an alert message</p>
             </bs-alert>
         `;
@@ -51,14 +51,14 @@ describe('bs-alert', () => {
         const bsAlert = (await fixture(alertTemplate));
 
         // then
-        assert.isNotAccessible(bsAlert);
+        expect(bsAlert.dismissable).to.equal(false);
     });
 
-    it('bs-alert with message is visible', async () => {
+    it('bs-alert is dismissable', async () => {
 
         // given
         const alertTemplate = html`
-            <bs-alert primary>
+            <bs-alert dismissable>
                 <p>This is an alert message</p>
             </bs-alert>
         `;
@@ -67,24 +67,31 @@ describe('bs-alert', () => {
         const bsAlert = (await fixture(alertTemplate));
 
         // then
-        expect(bsAlert.visible).to.equal(true);
+        expect(bsAlert.dismissable).to.equal(true);
     });
 
-    it('bs-alert with message is not visible', async () => {
+    it('bs-alert dismiss events are fired', async () => {
 
         // given
         const alertTemplate = html`
-            <bs-alert primary>
+            <bs-alert dismissable>
                 <p>This is an alert message</p>
             </bs-alert>
         `;
 
         const bsAlert = (await fixture(alertTemplate));
 
+        const closeBsAlertSpy = sinon.spy();
+        const closedBsAlertSpy = sinon.spy();
+
+        bsAlert.addEventListener('close.bs.alert', closeBsAlertSpy);
+        bsAlert.addEventListener('closed.bs.alert', closedBsAlertSpy);
+
         // when
-        bsAlert.removeAttribute('visible');
+        bsAlert.dismiss();
 
         // then
-        expect(bsAlert.visible).to.equal(false);
+        expect(closeBsAlertSpy.callCount).to.equal(1);
+        expect(closedBsAlertSpy.callCount).to.equal(1);
     });
 });

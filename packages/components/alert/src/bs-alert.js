@@ -42,15 +42,12 @@ export class BsAlert extends LitElement {
 
     dismiss() {
 
-        console.log(this.dismissable);
-
         if(this.dismissable) {
 
             this._fireCloseEvent();
 
             // the change in opacity triggers a css transition
-            // done in javascript to avoid the need of an extra
-            // element attribute.
+            // done in js to avoid the need of an extra element attribute.
             this.style.opacity = '0';
         }
     }

@@ -2,8 +2,6 @@
 import { LitElement, html } from 'lit-element';
 import { BsAlertDismissCss } from './bs-alert-dismiss.css.js';
 
-import './bs-close-button.js';
-
 export class BsAlertDismiss extends LitElement {
 
     static get styles() {
@@ -12,8 +10,25 @@ export class BsAlertDismiss extends LitElement {
 
     render() {
         return html`
-            <bs-close-button class="dismiss-button"></bs-close-button>
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         `;
+    }
+
+    firstUpdated() {
+        const buttonElement = this.shadowRoot.querySelector('button');
+        buttonElement.addEventListener('click', _ => this._handleClick());
+    }
+
+    _handleClick() {
+
+        const alertCloseEvent = new CustomEvent('close.button.click', {
+            bubbles: true,
+            composed: true
+        });
+
+        this.dispatchEvent(alertCloseEvent);
     }
 };
 
