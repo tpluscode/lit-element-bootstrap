@@ -1,6 +1,6 @@
 
 import sinon from 'sinon/pkg/sinon-esm.js';
-import { html, fixture, expect, assert } from '@open-wc/testing';
+import { html, fixture, expect, assert, oneEvent } from '@open-wc/testing';
 
 import '../src/bs-alert.js';
 
@@ -16,10 +16,10 @@ describe('bs-alert', () => {
         `;
 
         // when
-        const bsAlert = (await fixture(alertTemplate));
+        const bsAlert = await fixture(alertTemplate);
 
         // then
-        assert.isAccessible(bsAlert);
+        chai.assert.isAccessible(bsAlert);
     });
 
     it('bs-alert has correct aria role', async () => {
@@ -32,10 +32,10 @@ describe('bs-alert', () => {
         `;
 
         // when
-        const bsAlert = (await fixture(alertTemplate));
+        const bsAlert = await fixture(alertTemplate);
 
         // then
-        expect(bsAlert).to.have.attribute('role', 'alert');
+        chai.expect(bsAlert).to.have.attribute('role', 'alert');
     });
 
     it('bs-alert is not dismissable', async () => {
@@ -51,7 +51,7 @@ describe('bs-alert', () => {
         const bsAlert = (await fixture(alertTemplate));
 
         // then
-        expect(bsAlert.dismissable).to.equal(false);
+        chai.expect(bsAlert.dismissable).to.equal(false);
     });
 
     it('bs-alert is dismissable', async () => {
@@ -64,11 +64,14 @@ describe('bs-alert', () => {
         `;
 
         // when
-        const bsAlert = (await fixture(alertTemplate));
+        const bsAlert = await fixture(alertTemplate);
 
         // then
-        expect(bsAlert.dismissable).to.equal(true);
+        chai.expect(bsAlert.dismissable).to.equal(true);
     });
+});
+
+describe('bs-alert_dismiss_custom_events', () => {
 
     it('bs-alert dismiss events are fired', async () => {
 
@@ -79,8 +82,8 @@ describe('bs-alert', () => {
             </bs-alert>
         `;
 
-        const bsAlert = (await fixture(alertTemplate));
-
+        const bsAlert = await fixture(alertTemplate);
+        
         const closeBsAlertSpy = sinon.spy();
         const closedBsAlertSpy = sinon.spy();
 
@@ -88,10 +91,13 @@ describe('bs-alert', () => {
         bsAlert.addEventListener('closed.bs.alert', closedBsAlertSpy);
 
         // when
-        bsAlert.dismiss();
-
+        setTimeout(() => bsAlert.dismiss());
+        
         // then
-        expect(closeBsAlertSpy.callCount).to.equal(1);
-        expect(closedBsAlertSpy.callCount).to.equal(1);
+        await oneEvent(bsAlert, 'close.bs.alert');
+        await oneEvent(bsAlert, 'closed.bs.alert');
+
+        sinon.assert.calledOnce(closeBsAlertSpy);
+        sinon.assert.calledOnce(closedBsAlertSpy);
     });
 });
