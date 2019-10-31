@@ -43,28 +43,15 @@ export class BsAlert extends LitElement {
     dismiss() {
 
         if(this.dismissable) {
-
             this._fireCloseEvent();
-
-            // the change in opacity triggers a css transition
-            // done in js to avoid the need of an extra element attribute.
             this.style.opacity = '0';
         }
     }
 
     _afterElementTransition() {
+
         this._fireClosedEvent();
         this.remove();
-    }
-
-    _fireClosedEvent() {
-
-        const alertClosedEvent = new CustomEvent('closed.bs.alert', {
-            bubbles: true,
-            composed: true
-        });
-
-        this.dispatchEvent(alertClosedEvent);
     }
 
     _fireCloseEvent() {
@@ -75,6 +62,16 @@ export class BsAlert extends LitElement {
         });
 
         this.dispatchEvent(alertCloseEvent);
+    }
+
+    _fireClosedEvent() {
+
+        const alertClosedEvent = new CustomEvent('closed.bs.alert', {
+            bubbles: true,
+            composed: true
+        });
+
+        this.dispatchEvent(alertClosedEvent);
     }
 };
 

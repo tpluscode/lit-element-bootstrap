@@ -1,6 +1,6 @@
 
 import sinon from 'sinon/pkg/sinon-esm.js';
-import { html, fixture, expect, assert, oneEvent } from '@open-wc/testing';
+import { html, fixture, oneEvent, aTimeout } from '@open-wc/testing';
 
 import '../src/bs-alert.js';
 
@@ -83,7 +83,7 @@ describe('bs-alert_dismiss_custom_events', () => {
         `;
 
         const bsAlert = await fixture(alertTemplate);
-        
+
         const closeBsAlertSpy = sinon.spy();
         const closedBsAlertSpy = sinon.spy();
 
@@ -92,7 +92,47 @@ describe('bs-alert_dismiss_custom_events', () => {
 
         // when
         setTimeout(() => bsAlert.dismiss());
-        
+
+        // then
+        await oneEvent(bsAlert, 'close.bs.alert');
+        await oneEvent(bsAlert, 'closed.bs.alert');
+
+        sinon.assert.calledOnce(closeBsAlertSpy);
+        sinon.assert.calledOnce(closedBsAlertSpy);
+    });
+
+    it('bs-alert dismiss events after it receives close button event', async () => {
+
+        // given
+        const alertTemplate = html`
+            <bs-alert dismissable>
+                <p>This is an alert message</p>
+                <button slot="dismiss"></button>
+            </bs-alert>
+        `;
+
+        const bsAlert = await fixture(alertTemplate);
+
+        const closeBsAlertSpy = sinon.spy();
+        const closedBsAlertSpy = sinon.spy();
+
+        bsAlert.addEventListener('close.bs.alert', closeBsAlertSpy);
+        bsAlert.addEventListener('closed.bs.alert', closedBsAlertSpy);
+
+        const button = bsAlert.querySelector('button');
+        button.addEventListener('click', _ => {
+
+            const closeButtonClickEvent = new CustomEvent('close.button.click', {
+                bubbles: true,
+                composed: true
+            });
+
+            button.dispatchEvent(closeButtonClickEvent);
+        });
+
+        // when
+        setTimeout(() => button.click());
+
         // then
         await oneEvent(bsAlert, 'close.bs.alert');
         await oneEvent(bsAlert, 'closed.bs.alert');

@@ -23,12 +23,12 @@ export class BsAlertDismiss extends LitElement {
 
     _handleClick() {
 
-        const alertCloseEvent = new CustomEvent('close.button.click', {
+        const closeButtonClickEvent = new CustomEvent('close.button.click', {
             bubbles: true,
             composed: true
         });
 
-        this.dispatchEvent(alertCloseEvent);
+        this.dispatchEvent(closeButtonClickEvent);
     }
 };
 
